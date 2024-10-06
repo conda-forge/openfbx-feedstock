@@ -9,6 +9,6 @@ channel_targets:
 cxx_compiler:
 - vs2019
 libdeflate:
-- '1.21'
+- '1.22'
 target_platform:
 - win-64
