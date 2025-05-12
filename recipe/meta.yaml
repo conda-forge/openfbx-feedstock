@@ -10,7 +10,7 @@ source:
     sha256: d6495e05d469bf2c51b860bb0518db6fb2ccf1df9a542a6b1c0f618202641e94
 
 build:
-  number: 7
+  number: 8
   run_exports:
     - {{ pin_subpackage('openfbx', max_pin='x.x') }}
 
