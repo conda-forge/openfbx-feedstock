@@ -3,7 +3,7 @@
 
 package:
   name: {{ name|lower }}
-  version: {{ version }}
+  version: "{{ version }}"
 
 source:
   - url: https://github.com/nem0/OpenFBX/archive/v{{ version }}.tar.gz
@@ -27,7 +27,20 @@ requirements:
 test:
   commands:
     - test -f $PREFIX/share/openfbx/openfbxConfig.cmake  # [not win]
+    - cmake -S tests -B tests/build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$PREFIX  # [not win]
+    - cmake --build tests/build --config Release  # [not win]
+    - ctest --test-dir tests/build --output-on-failure  # [not win]
     - if not exist %PREFIX%\\Library\\share\\openfbx\\openfbxConfig.cmake exit 1  # [win]
+    - cmake -S tests -B tests\\build -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX%  # [win]
+    - cmake --build tests\\build --config Release  # [win]
+    - ctest --test-dir tests\\build --output-on-failure -C Release  # [win]
+  requires:
+    - cmake
+    - {{ compiler('cxx') }}
+    - ninja  # [not win]
+    - {{ stdlib('c') }}
+  files:
+    - tests/
 
 about:
   home: https://github.com/nem0/OpenFBX
