@@ -36,7 +36,9 @@ test:
     - ctest --test-dir tests\\build --output-on-failure -C Release  # [win]
   requires:
     - cmake
+    - {{ compiler('cxx') }}
     - ninja  # [not win]
+    - {{ stdlib('c') }}
   files:
     - tests/
 
