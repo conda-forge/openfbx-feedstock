@@ -1,0 +1,74 @@
+schema_version: 1
+
+context:
+  name: OpenFBX
+  version: "0.9"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/nem0/OpenFBX/archive/v${{ version }}.tar.gz
+  sha256: d6495e05d469bf2c51b860bb0518db6fb2ccf1df9a542a6b1c0f618202641e94
+
+build:
+  number: 10
+  script:
+    - if: unix
+      then: bash "${RECIPE_DIR}/build.sh"
+    - if: win
+      then: call "%RECIPE_DIR%\\build.bat"
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ stdlib('c') }}
+    - cmake
+    - if: not win
+      then: ninja
+  host:
+    - libdeflate
+  run_exports:
+    - ${{ pin_subpackage('openfbx', upper_bound='x.x') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - test -f $PREFIX/share/openfbx/openfbxConfig.cmake
+          - cmake -S tests -B tests/build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$PREFIX
+          - cmake --build tests/build --config Release
+          - ctest --test-dir tests/build --output-on-failure
+      - if: win
+        then:
+          - if not exist %PREFIX%\\Library\\share\\openfbx\\openfbxConfig.cmake exit 1
+          - cmake -S tests -B tests\\build -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX%
+          - cmake --build tests\\build --config Release
+          - ctest --test-dir tests\\build --output-on-failure -C Release
+    requirements:
+      run:
+        - ${{ compiler('cxx') }}
+        - ${{ stdlib('c') }}
+        - cmake
+        - if: not win
+          then: ninja
+    files:
+      recipe:
+        - tests/
+
+about:
+  homepage: https://github.com/nem0/OpenFBX
+  repository: https://github.com/nem0/OpenFBX
+  summary: Lightweight open source FBX importer
+  description: |
+    Lightweight open source FBX importer. Used in Lumix Engine and Flax Engine. It's an almost
+    full-featured importer. It can load geometry (with uvs, normals, tangents, colors), skeletons,
+    animations, blend shapes, materials, textures, cameras and lights.
+  license: MIT
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - jeongseok-meta

@@ -15,7 +15,6 @@ Lightweight open source FBX importer. Used in Lumix Engine and Flax Engine. It's
 full-featured importer. It can load geometry (with uvs, normals, tangents, colors), skeletons,
 animations, blend shapes, materials, textures, cameras and lights.
 
-
 Current build status
 ====================
 
