@@ -28,6 +28,8 @@ requirements:
     - cmake
     - if: not win
       then: ninja
+  host:
+    - libdeflate
   run_exports:
     - ${{ pin_subpackage('openfbx', upper_bound='x.x') }}
 
