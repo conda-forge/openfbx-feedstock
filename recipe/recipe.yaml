@@ -13,7 +13,7 @@ source:
   sha256: d6495e05d469bf2c51b860bb0518db6fb2ccf1df9a542a6b1c0f618202641e94
 
 build:
-  number: 10
+  number: 11
   script:
     - if: unix
       then: bash "${RECIPE_DIR}/build.sh"
